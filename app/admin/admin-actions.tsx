@@ -27,14 +27,14 @@ export default function AdminActions({ listingId }: AdminActionsProps) {
       <button
         onClick={() => updateStatus('live')}
         disabled={!!loading}
-        className="text-xs px-2.5 py-1.5 rounded bg-sage-faint text-sage border border-sage/20 hover:bg-sage hover:text-bg-primary transition-colors disabled:opacity-50"
+        className="text-xs px-2.5 py-1.5 rounded bg-accent-faint text-accent border border-accent/30 hover:bg-accent hover:text-white transition-colors disabled:opacity-50"
       >
         {loading === 'approve' ? '…' : 'Approve'}
       </button>
       <button
         onClick={() => updateStatus('rejected')}
         disabled={!!loading}
-        className="text-xs px-2.5 py-1.5 rounded bg-red-400/10 text-red-400 border border-red-400/20 hover:bg-red-400 hover:text-white transition-colors disabled:opacity-50"
+        className="text-xs px-2.5 py-1.5 rounded bg-red-50 text-red-700 border border-red-200 hover:bg-red-600 hover:text-white transition-colors disabled:opacity-50"
       >
         {loading === 'reject' ? '…' : 'Reject'}
       </button>

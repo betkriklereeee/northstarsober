@@ -30,9 +30,7 @@ export default function SignupPage() {
     const { error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
-      options: {
-        data: { name: form.name },
-      },
+      options: { data: { name: form.name } },
     })
 
     if (error) {
@@ -46,15 +44,15 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4 py-12">
+    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4 py-12 bg-bg-primary">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="text-2xl font-bold text-sage mb-1">9090</div>
+          <div className="text-2xl font-bold text-accent mb-1">9090</div>
           <h1 className="text-xl font-semibold text-fg-primary">List your home</h1>
           <p className="text-sm text-fg-secondary mt-1">Free to join, free to list</p>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-6 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="label">Your name</label>
@@ -105,7 +103,9 @@ export default function SignupPage() {
             </div>
 
             {error && (
-              <p className="text-xs text-red-400 bg-red-400/10 rounded px-3 py-2">{error}</p>
+              <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded px-3 py-2">
+                {error}
+              </p>
             )}
 
             <button type="submit" disabled={loading} className="btn-primary w-full">
@@ -115,7 +115,7 @@ export default function SignupPage() {
 
           <p className="text-center text-xs text-fg-muted mt-4">
             Already have an account?{' '}
-            <Link href="/operator/login" className="text-sage hover:text-sage-light transition-colors">
+            <Link href="/operator/login" className="text-accent hover:text-accent-dark transition-colors">
               Sign in
             </Link>
           </p>

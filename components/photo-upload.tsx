@@ -56,19 +56,19 @@ export default function PhotoUpload({ photos, onChange, listingId, userId }: Pho
     <div className="space-y-3">
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {photos.map((url, i) => (
-          <div key={url} className="relative aspect-square rounded overflow-hidden group bg-bg-elevated">
+          <div key={url} className="relative aspect-square rounded overflow-hidden group bg-bg-secondary border border-border">
             <Image src={url} alt={`Photo ${i + 1}`} fill className="object-cover" />
             {i === 0 && (
-              <span className="absolute top-1 left-1 text-xs bg-bg-primary/80 text-fg-secondary px-1 rounded">
+              <span className="absolute top-1 left-1 text-xs bg-white/80 text-fg-secondary px-1.5 py-0.5 rounded shadow-sm font-medium">
                 Cover
               </span>
             )}
-            <div className="absolute inset-0 bg-bg-primary/0 group-hover:bg-bg-primary/40 transition-colors flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
+            <div className="absolute inset-0 bg-bg-primary/0 group-hover:bg-bg-primary/30 transition-colors flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
               {i > 0 && (
                 <button
                   type="button"
                   onClick={() => movePhoto(i, i - 1)}
-                  className="w-6 h-6 rounded bg-bg-secondary text-fg-primary text-xs flex items-center justify-center hover:bg-bg-elevated"
+                  className="w-6 h-6 rounded bg-white text-fg-primary text-xs flex items-center justify-center hover:bg-bg-secondary shadow-sm"
                   title="Move left"
                 >
                   ←
@@ -77,7 +77,7 @@ export default function PhotoUpload({ photos, onChange, listingId, userId }: Pho
               <button
                 type="button"
                 onClick={() => removePhoto(url)}
-                className="w-6 h-6 rounded bg-red-500/80 text-white text-xs flex items-center justify-center hover:bg-red-500"
+                className="w-6 h-6 rounded bg-red-500 text-white text-xs flex items-center justify-center hover:bg-red-600 shadow-sm"
                 title="Remove"
               >
                 ✕
@@ -86,7 +86,7 @@ export default function PhotoUpload({ photos, onChange, listingId, userId }: Pho
                 <button
                   type="button"
                   onClick={() => movePhoto(i, i + 1)}
-                  className="w-6 h-6 rounded bg-bg-secondary text-fg-primary text-xs flex items-center justify-center hover:bg-bg-elevated"
+                  className="w-6 h-6 rounded bg-white text-fg-primary text-xs flex items-center justify-center hover:bg-bg-secondary shadow-sm"
                   title="Move right"
                 >
                   →
@@ -100,7 +100,7 @@ export default function PhotoUpload({ photos, onChange, listingId, userId }: Pho
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="aspect-square rounded border-2 border-dashed border-border hover:border-sage/50 text-fg-muted hover:text-sage transition-colors flex flex-col items-center justify-center gap-1 text-xs"
+          className="aspect-square rounded border-2 border-dashed border-border hover:border-accent/50 text-fg-muted hover:text-accent transition-colors flex flex-col items-center justify-center gap-1 text-xs bg-bg-secondary"
         >
           {uploading ? (
             <>

@@ -11,75 +11,78 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
-  const fromEmail = 'onboarding@resend.dev'
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev'
   const replyTo = email
 
-  try {
-    // Email to operator
-    if (listingEmail) {
+  // Send to operator — independent try/catch so failure doesn't block confirmation
+  if (listingEmail) {
+    try {
       await resend.emails.send({
         from: `9090 Homes <${fromEmail}>`,
         to: [listingEmail],
         replyTo,
         subject: `New inquiry for ${listingName}`,
         html: `
-          <div style="font-family: system-ui, sans-serif; max-width: 520px; margin: 0 auto; background: #1a1a1a; color: #f0ede8; padding: 32px; border-radius: 8px;">
-            <h2 style="color: #7a9e7e; margin-top: 0;">New inquiry — ${listingName}</h2>
+          <div style="font-family: system-ui, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff; color: #0f1923; padding: 32px; border-radius: 8px; border: 1px solid #dee2e6;">
+            <h2 style="color: #4a7fa5; margin-top: 0; font-size: 18px;">New inquiry — ${listingName}</h2>
             <table style="width: 100%; border-collapse: collapse;">
               <tr>
-                <td style="padding: 8px 0; color: #a09b96; font-size: 13px; width: 80px;">Name</td>
-                <td style="padding: 8px 0; font-size: 14px;">${name}</td>
+                <td style="padding: 8px 0; color: #718096; font-size: 13px; width: 80px;">Name</td>
+                <td style="padding: 8px 0; font-size: 14px; color: #0f1923;">${name}</td>
               </tr>
               <tr>
-                <td style="padding: 8px 0; color: #a09b96; font-size: 13px;">Email</td>
-                <td style="padding: 8px 0; font-size: 14px;"><a href="mailto:${email}" style="color: #7a9e7e;">${email}</a></td>
+                <td style="padding: 8px 0; color: #718096; font-size: 13px;">Email</td>
+                <td style="padding: 8px 0; font-size: 14px;"><a href="mailto:${email}" style="color: #4a7fa5;">${email}</a></td>
               </tr>
               ${phone ? `<tr>
-                <td style="padding: 8px 0; color: #a09b96; font-size: 13px;">Phone</td>
-                <td style="padding: 8px 0; font-size: 14px;"><a href="tel:${phone}" style="color: #7a9e7e;">${phone}</a></td>
+                <td style="padding: 8px 0; color: #718096; font-size: 13px;">Phone</td>
+                <td style="padding: 8px 0; font-size: 14px;"><a href="tel:${phone}" style="color: #4a7fa5;">${phone}</a></td>
               </tr>` : ''}
             </table>
-            <div style="margin-top: 16px; padding: 16px; background: #222; border-radius: 6px; border-left: 3px solid #7a9e7e;">
-              <p style="margin: 0; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${message}</p>
+            <div style="margin-top: 16px; padding: 16px; background: #f1f3f5; border-radius: 6px; border-left: 3px solid #4a7fa5;">
+              <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #0f1923; white-space: pre-wrap;">${message}</p>
             </div>
-            <p style="margin-top: 20px; color: #5c5652; font-size: 12px;">
+            <p style="margin-top: 20px; color: #718096; font-size: 12px;">
               Reply directly to this email to respond to ${name}.
             </p>
-            <hr style="border: none; border-top: 1px solid #252525; margin: 20px 0;" />
-            <p style="margin: 0; color: #5c5652; font-size: 11px;">
-              Sent via <a href="https://9090homes.com" style="color: #7a9e7e; text-decoration: none;">9090 Homes</a>
+            <hr style="border: none; border-top: 1px solid #dee2e6; margin: 20px 0;" />
+            <p style="margin: 0; color: #718096; font-size: 11px;">
+              Sent via <a href="https://9090homes.com" style="color: #4a7fa5; text-decoration: none;">9090 Homes</a>
             </p>
           </div>
         `,
       })
+    } catch (err) {
+      console.error('[9090 Homes] Failed to send operator inquiry email:', err)
     }
+  }
 
-    // Confirmation to inquirer
+  // Send confirmation to inquirer — independent try/catch
+  try {
     await resend.emails.send({
       from: `9090 Homes <${fromEmail}>`,
       to: [email],
       subject: `Your inquiry to ${listingName}`,
       html: `
-        <div style="font-family: system-ui, sans-serif; max-width: 520px; margin: 0 auto; background: #1a1a1a; color: #f0ede8; padding: 32px; border-radius: 8px;">
-          <h2 style="color: #7a9e7e; margin-top: 0;">Message sent</h2>
-          <p style="color: #a09b96; font-size: 14px; line-height: 1.6;">
-            Hi ${name}, your inquiry to <strong style="color: #f0ede8;">${listingName}</strong> has been sent.
+        <div style="font-family: system-ui, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff; color: #0f1923; padding: 32px; border-radius: 8px; border: 1px solid #dee2e6;">
+          <h2 style="color: #4a7fa5; margin-top: 0; font-size: 18px;">Message sent</h2>
+          <p style="color: #4a5568; font-size: 14px; line-height: 1.6;">
+            Hi ${name}, your inquiry to <strong style="color: #0f1923;">${listingName}</strong> has been sent.
             The operator will follow up with you directly.
           </p>
-          <div style="margin-top: 16px; padding: 16px; background: #222; border-radius: 6px; color: #a09b96; font-size: 13px;">
+          <div style="margin-top: 16px; padding: 16px; background: #f1f3f5; border-radius: 6px; color: #718096; font-size: 13px;">
             <p style="margin: 0; font-style: italic; white-space: pre-wrap;">"${message}"</p>
           </div>
-          <hr style="border: none; border-top: 1px solid #252525; margin: 20px 0;" />
-          <p style="margin: 0; color: #5c5652; font-size: 11px;">
-            <a href="https://9090homes.com" style="color: #7a9e7e; text-decoration: none;">9090 Homes</a> — Find a home. Start your 90.
+          <hr style="border: none; border-top: 1px solid #dee2e6; margin: 20px 0;" />
+          <p style="margin: 0; color: #718096; font-size: 11px;">
+            <a href="https://9090homes.com" style="color: #4a7fa5; text-decoration: none;">9090 Homes</a> — Find a home. Start your 90.
           </p>
         </div>
       `,
     })
-
-    return NextResponse.json({ success: true })
   } catch (err) {
-    console.error('Email send error:', err)
-    return NextResponse.json({ error: 'Failed to send email' }, { status: 500 })
+    console.error('[9090 Homes] Failed to send confirmation email:', err)
   }
+
+  return NextResponse.json({ success: true })
 }

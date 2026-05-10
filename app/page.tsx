@@ -26,38 +26,70 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <div className="bg-bg-secondary border-b border-border px-6 py-10 text-center">
-        <p className="text-xs font-medium tracking-widest text-sage uppercase mb-3">
+      <div className="bg-bg-card border-b border-border px-6 py-10 text-center">
+        <p className="text-xs font-medium tracking-widest text-accent uppercase mb-3">
           California Sober Living Directory
         </p>
         <h1 className="text-3xl sm:text-4xl font-bold text-fg-primary mb-3 tracking-tight">
           Find a home.{' '}
-          <span className="text-sage">Start your 90.</span>
+          <span className="text-accent">Start your 90.</span>
         </h1>
         <p className="text-fg-secondary text-sm max-w-xl mx-auto leading-relaxed">
           Verified, cash-pay sober living homes across California. Real houses, real communities.
           Search by city, county, or zip — no ads, no upsells.
         </p>
-        <div className="flex items-center justify-center gap-4 mt-6 text-xs text-fg-muted">
+        <div className="flex items-center justify-center gap-4 mt-6 text-xs text-fg-muted flex-wrap">
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-sage" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
             {flat.length} homes listed
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-sage" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
             Cash pay only
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-sage" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
             Free to search
           </span>
         </div>
       </div>
 
+      {/* Testimonials */}
+      <div className="bg-bg-secondary border-b border-border px-6 py-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              {
+                quote: "I called eight places before I found one that picked up. This made the whole thing less overwhelming.",
+                attr: "Anonymous, Los Angeles",
+              },
+              {
+                quote: "My son needed a place fast. I didn't know what I was looking for but the filters helped me narrow it down.",
+                attr: "Anonymous, Orange County",
+              },
+              {
+                quote: "I've referred three clients here already. It's the first directory I trust enough to send families to.",
+                attr: "Anonymous, San Diego",
+              },
+            ].map(({ quote, attr }) => (
+              <div
+                key={attr}
+                className="bg-bg-card border border-border rounded-lg p-5 border-l-4 border-l-accent"
+              >
+                <p className="text-sm text-fg-secondary leading-relaxed italic mb-3">
+                  &ldquo;{quote}&rdquo;
+                </p>
+                <p className="text-xs text-fg-muted font-medium">— {attr}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <DirectoryView listings={flat} />
 
-      {/* How it works section */}
-      <section id="how-it-works" className="bg-bg-secondary border-t border-border py-16 px-6">
+      {/* How it works */}
+      <section id="how-it-works" className="bg-bg-card border-t border-border py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="section-title text-center mb-8">How it works</p>
           <div className="grid sm:grid-cols-3 gap-8">
@@ -70,16 +102,16 @@ export default async function HomePage() {
               {
                 n: '02',
                 title: 'Request info',
-                body: 'Found somewhere that feels right? Send a message directly to the house operator. No gatekeepers, no intake departments.',
+                body: "Found somewhere that feels right? Send a message directly to the house operator. No gatekeepers, no intake departments.",
               },
               {
                 n: '03',
                 title: 'Move in ready',
-                body: 'These homes run on cash pay, community, and accountability. Show up willing to do the work — that\'s all that\'s required.',
+                body: "These homes run on cash pay, community, and accountability. Show up willing to do the work — that's all that's required.",
               },
             ].map(({ n, title, body }) => (
               <div key={n} className="space-y-3">
-                <div className="text-3xl font-bold text-sage/30 font-mono">{n}</div>
+                <div className="text-3xl font-bold text-accent/20 font-mono">{n}</div>
                 <h3 className="font-semibold text-fg-primary">{title}</h3>
                 <p className="text-sm text-fg-secondary leading-relaxed">{body}</p>
               </div>
@@ -89,7 +121,7 @@ export default async function HomePage() {
       </section>
 
       {/* CTA for operators */}
-      <section className="border-t border-border py-14 px-6 text-center">
+      <section className="border-t border-border bg-accent-faint py-14 px-6 text-center">
         <div className="max-w-lg mx-auto">
           <p className="section-title mb-3">For operators</p>
           <h2 className="text-xl font-bold text-fg-primary mb-3">

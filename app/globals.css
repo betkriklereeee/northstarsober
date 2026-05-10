@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 240, 237, 232;
-  --background-start-rgb: 15, 15, 15;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -16,20 +11,20 @@ html {
 }
 
 body {
-  background-color: #0f0f0f;
-  color: #f0ede8;
+  background-color: #f8f9fa;
+  color: #0f1923;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Mapbox overrides */
+/* Mapbox overrides — light theme */
 .mapboxgl-popup-content {
-  background: #1a1a1a !important;
-  border: 1px solid #252525 !important;
+  background: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
   border-radius: 0.5rem !important;
   padding: 0 !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
-  color: #f0ede8 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+  color: #0f1923 !important;
 }
 
 .mapboxgl-popup-tip {
@@ -37,7 +32,7 @@ body {
 }
 
 .mapboxgl-popup-close-button {
-  color: #a09b96 !important;
+  color: #718096 !important;
   font-size: 1.25rem !important;
   padding: 0.5rem !important;
   right: 0.25rem !important;
@@ -46,26 +41,26 @@ body {
 }
 
 .mapboxgl-popup-close-button:hover {
-  color: #f0ede8 !important;
+  color: #0f1923 !important;
   background: transparent !important;
 }
 
 .mapboxgl-ctrl-attrib {
-  background: rgba(15, 15, 15, 0.8) !important;
-  color: #5c5652 !important;
+  background: rgba(248, 249, 250, 0.9) !important;
+  color: #718096 !important;
 }
 
 .mapboxgl-ctrl-attrib a {
-  color: #7a9e7e !important;
+  color: #4a7fa5 !important;
 }
 
 .mapboxgl-ctrl button {
-  background-color: #1a1a1a !important;
-  border: 1px solid #252525 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
 }
 
 .mapboxgl-ctrl button .mapboxgl-ctrl-icon {
-  filter: invert(0.8);
+  filter: none;
 }
 
 /* Scrollbar */
@@ -75,44 +70,47 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f0f0f;
+  background: #f8f9fa;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2f2f2f;
+  background: #dee2e6;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f3f;
+  background: #c5ddf0;
 }
 
-/* Custom focus ring */
+/* Focus ring */
 :focus-visible {
-  outline: 2px solid #7a9e7e;
+  outline: 2px solid #4a7fa5;
   outline-offset: 2px;
 }
 
-/* Transition defaults */
-.transition-default {
-  transition: all 0.15s ease;
+/* Print styles */
+@media print {
+  body {
+    background: #ffffff;
+    color: #0f1923;
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-sage text-bg-primary font-medium px-4 py-2 rounded hover:bg-sage-light transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-accent text-white font-medium px-4 py-2 rounded hover:bg-accent-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-bg-elevated text-fg-primary font-medium px-4 py-2 rounded border border-border hover:border-border-light transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-bg-card text-fg-primary font-medium px-4 py-2 rounded border border-border hover:border-border-accent hover:bg-bg-secondary transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
-    @apply text-fg-secondary hover:text-fg-primary px-3 py-1.5 rounded transition-colors duration-150 text-sm;
+    @apply text-fg-secondary hover:text-fg-primary px-3 py-1.5 rounded transition-colors duration-150 text-sm hover:bg-bg-secondary;
   }
 
   .input-field {
-    @apply w-full bg-bg-tertiary border border-border text-fg-primary placeholder-fg-muted rounded px-3 py-2 text-sm focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage transition-colors duration-150;
+    @apply w-full bg-bg-card border border-border text-fg-primary placeholder-fg-muted rounded px-3 py-2 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors duration-150;
   }
 
   .label {
@@ -127,12 +125,12 @@ body {
     @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium;
   }
 
-  .badge-sage {
-    @apply badge bg-sage-faint text-sage border border-sage/20;
+  .badge-accent {
+    @apply badge bg-accent-faint text-accent border border-accent/30;
   }
 
   .badge-muted {
-    @apply badge bg-bg-elevated text-fg-secondary border border-border;
+    @apply badge bg-bg-secondary text-fg-secondary border border-border;
   }
 
   .section-title {
