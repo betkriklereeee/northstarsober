@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
-  const fromEmail = 'inquiries@9090homes.com'
+  const fromEmail = 'onboarding@resend.dev'
   const replyTo = email
 
   try {
