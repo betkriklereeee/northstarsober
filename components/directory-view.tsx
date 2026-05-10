@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useRef, useCallback } from 'react'
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import ListingCard from '@/components/listing-card'
 import SearchFilters from '@/components/search-filters'
@@ -43,6 +43,37 @@ export default function DirectoryView({ listings }: DirectoryViewProps) {
   const listRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
+  // CMD+Scroll lock on list panel
+  useEffect(() => {
+    const el = listRef.current
+    if (!el) return
+
+    let cmdHeld = false
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Meta') cmdHeld = true
+    }
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Meta') cmdHeld = false
+    }
+    const onWheel = (e: WheelEvent) => {
+      if (cmdHeld) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+    el.addEventListener('wheel', onWheel, { passive: false })
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
+      el.removeEventListener('wheel', onWheel)
+    }
+  }, [])
+
   const filtered = useMemo(() => {
     return listings.filter((l) => {
       const q = filters.query.toLowerCase()
@@ -73,20 +104,18 @@ export default function DirectoryView({ listings }: DirectoryViewProps) {
   const handleSelectFromMap = useCallback((id: string) => {
     setSelectedId(id)
     const el = cardRefs.current.get(id)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }, [])
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem)]">
       {/* Mobile tab switcher */}
-      <div className="md:hidden flex border-b border-border">
+      <div className="md:hidden flex border-b border-border bg-bg-card">
         <button
           onClick={() => setMobileTab('list')}
           className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
             mobileTab === 'list'
-              ? 'text-fg-primary border-b-2 border-sage'
+              ? 'text-accent border-b-2 border-accent'
               : 'text-fg-secondary'
           }`}
         >
@@ -96,7 +125,7 @@ export default function DirectoryView({ listings }: DirectoryViewProps) {
           onClick={() => setMobileTab('map')}
           className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
             mobileTab === 'map'
-              ? 'text-fg-primary border-b-2 border-sage'
+              ? 'text-accent border-b-2 border-accent'
               : 'text-fg-secondary'
           }`}
         >
@@ -109,7 +138,7 @@ export default function DirectoryView({ listings }: DirectoryViewProps) {
         <div
           className={`
             flex flex-col w-full md:w-[420px] lg:w-[460px] shrink-0
-            border-r border-border
+            border-r border-border bg-bg-secondary
             ${mobileTab === 'map' ? 'hidden md:flex' : 'flex'}
           `}
         >
@@ -123,7 +152,7 @@ export default function DirectoryView({ listings }: DirectoryViewProps) {
           <div ref={listRef} className="flex-1 overflow-y-auto p-3 space-y-2.5">
             {filtered.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
-                <svg className="w-12 h-12 text-fg-muted mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-12 h-12 text-fg-muted/40 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <p className="text-fg-secondary text-sm font-medium">No homes found</p>

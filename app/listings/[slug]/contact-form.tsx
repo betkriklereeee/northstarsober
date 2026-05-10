@@ -20,14 +20,8 @@ export default function ContactForm({ listingId, listingName, listingEmail }: Co
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          listingId,
-          listingName,
-          listingEmail,
-          ...form,
-        }),
+        body: JSON.stringify({ listingId, listingName, listingEmail, ...form }),
       })
-
       if (!res.ok) throw new Error('Failed to send')
       setStatus('success')
     } catch {
@@ -38,8 +32,8 @@ export default function ContactForm({ listingId, listingName, listingEmail }: Co
   if (status === 'success') {
     return (
       <div className="text-center py-4">
-        <div className="w-10 h-10 rounded-full bg-sage-faint flex items-center justify-center mx-auto mb-3">
-          <svg className="w-5 h-5 text-sage" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-10 h-10 rounded-full bg-accent-faint flex items-center justify-center mx-auto mb-3">
+          <svg className="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
@@ -96,7 +90,9 @@ export default function ContactForm({ listingId, listingName, listingEmail }: Co
       </div>
 
       {status === 'error' && (
-        <p className="text-xs text-red-400">Something went wrong — please try again.</p>
+        <p className="text-xs text-red-600 bg-red-50 rounded px-3 py-2">
+          Something went wrong — please try again.
+        </p>
       )}
 
       <button type="submit" disabled={status === 'loading'} className="btn-primary w-full">

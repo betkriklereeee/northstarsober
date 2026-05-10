@@ -57,11 +57,11 @@ export default async function AdminPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-8">
         {[
-          { label: 'Live', value: counts.live ?? 0, color: 'text-sage' },
-          { label: 'Pending', value: counts.pending ?? 0, color: 'text-yellow-400' },
-          { label: 'Rejected', value: counts.rejected ?? 0, color: 'text-red-400' },
+          { label: 'Live', value: counts.live ?? 0, color: 'text-accent' },
+          { label: 'Pending', value: counts.pending ?? 0, color: 'text-amber-600' },
+          { label: 'Rejected', value: counts.rejected ?? 0, color: 'text-red-600' },
         ].map(({ label, value, color }) => (
-          <div key={label} className="card p-4 text-center">
+          <div key={label} className="card p-4 text-center shadow-sm">
             <p className={`text-2xl font-bold ${color}`}>{value}</p>
             <p className="text-xs text-fg-muted mt-1">{label}</p>
           </div>
@@ -70,10 +70,10 @@ export default async function AdminPage() {
 
       {/* Pending */}
       <section className="mb-8">
-        <h2 className="font-semibold text-fg-primary mb-3">
+        <h2 className="font-semibold text-fg-primary mb-3 flex items-center gap-2">
           Pending review
           {pending && pending.length > 0 && (
-            <span className="ml-2 badge bg-yellow-400/10 text-yellow-400 border-yellow-400/20">
+            <span className="badge bg-amber-50 text-amber-700 border border-amber-200">
               {pending.length}
             </span>
           )}
@@ -86,7 +86,7 @@ export default async function AdminPage() {
         ) : (
           <div className="space-y-3">
             {pending.map((listing: any) => (
-              <div key={listing.id} className="card p-4">
+              <div key={listing.id} className="card p-4 shadow-sm">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
@@ -125,13 +125,13 @@ export default async function AdminPage() {
       {/* Recent decisions */}
       <section>
         <h2 className="font-semibold text-fg-primary mb-3">Recent decisions</h2>
-        <div className="space-y-2">
+        <div className="card shadow-sm divide-y divide-border">
           {(recent ?? []).map((listing: any) => (
-            <div key={listing.id} className="flex items-center gap-3 py-2 border-b border-border text-sm">
+            <div key={listing.id} className="flex items-center gap-3 px-4 py-3 text-sm">
               <span className={`badge border text-xs ${
                 listing.status === 'live'
-                  ? 'bg-sage-faint text-sage border-sage/20'
-                  : 'bg-red-400/10 text-red-400 border-red-400/20'
+                  ? 'bg-accent-faint text-accent border-accent/30'
+                  : 'bg-red-50 text-red-700 border-red-200'
               }`}>
                 {listing.status}
               </span>

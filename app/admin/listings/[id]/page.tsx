@@ -34,6 +34,12 @@ export default async function AdminListingReviewPage({ params }: Props) {
 
   const amenities = listing.listing_amenities?.map((la: any) => la.amenities.name) ?? []
 
+  const statusStyle: Record<string, string> = {
+    live: 'bg-accent-faint text-accent border-accent/30',
+    pending: 'bg-amber-50 text-amber-700 border-amber-200',
+    rejected: 'bg-red-50 text-red-700 border-red-200',
+  }
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex items-center justify-between mb-6">
@@ -53,15 +59,9 @@ export default async function AdminListingReviewPage({ params }: Props) {
 
       <div className="space-y-6">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className={`badge border text-xs ${
-              listing.status === 'live' ? 'bg-sage-faint text-sage border-sage/20' :
-              listing.status === 'pending' ? 'bg-yellow-400/10 text-yellow-400 border-yellow-400/20' :
-              'bg-red-400/10 text-red-400 border-red-400/20'
-            }`}>
-              {listing.status}
-            </span>
-          </div>
+          <span className={`badge border text-xs mb-2 inline-flex ${statusStyle[listing.status]}`}>
+            {listing.status}
+          </span>
           <h1 className="text-2xl font-bold text-fg-primary">{listing.name}</h1>
           <p className="text-fg-secondary text-sm mt-1">
             {listing.city}, {listing.county} County · {listing.zip}
@@ -74,7 +74,7 @@ export default async function AdminListingReviewPage({ params }: Props) {
         {listing.photos?.length > 0 && (
           <div className="grid grid-cols-3 gap-2">
             {listing.photos.map((url: string, i: number) => (
-              <div key={i} className="aspect-video relative rounded overflow-hidden bg-bg-elevated">
+              <div key={i} className="aspect-video relative rounded overflow-hidden bg-bg-secondary border border-border">
                 <Image src={url} alt="" fill className="object-cover" />
               </div>
             ))}
@@ -82,19 +82,19 @@ export default async function AdminListingReviewPage({ params }: Props) {
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
-          <div className="card p-3">
+          <div className="card p-3 shadow-sm">
             <p className="section-title mb-1">Gender</p>
             <p className="font-medium">{formatGender(listing.gender)}</p>
           </div>
-          <div className="card p-3">
+          <div className="card p-3 shadow-sm">
             <p className="section-title mb-1">Rent</p>
             <p className="font-medium">{formatPrice(listing.price_min, listing.price_max)}</p>
           </div>
-          <div className="card p-3">
+          <div className="card p-3 shadow-sm">
             <p className="section-title mb-1">Beds</p>
             <p className="font-medium">{formatBeds(listing.bed_count) || '—'}</p>
           </div>
-          <div className="card p-3">
+          <div className="card p-3 shadow-sm">
             <p className="section-title mb-1">Flags</p>
             <p className="font-medium text-xs">
               {[listing.pet_friendly && 'Pet ✓', listing.mat_friendly && 'MAT ✓'].filter(Boolean).join(' · ') || 'None'}
@@ -102,7 +102,7 @@ export default async function AdminListingReviewPage({ params }: Props) {
           </div>
         </div>
 
-        <div className="card p-4">
+        <div className="card p-4 shadow-sm">
           <p className="section-title mb-2">Address</p>
           <p className="text-sm text-fg-secondary">{listing.address}, {listing.city}, CA {listing.zip}</p>
           <p className="text-xs text-fg-muted mt-1">
@@ -135,7 +135,7 @@ export default async function AdminListingReviewPage({ params }: Props) {
           </div>
         )}
 
-        <div className="card p-4">
+        <div className="card p-4 shadow-sm">
           <p className="section-title mb-2">Contact info</p>
           <div className="space-y-1 text-sm text-fg-secondary">
             {listing.phone && <p>Phone: {listing.phone}</p>}

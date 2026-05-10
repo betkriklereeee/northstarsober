@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { formatPrice, formatGender, formatBeds } from '@/lib/utils'
 import ContactForm from './contact-form'
+import ShareButton from './share-button'
 
 interface Props {
   params: { slug: string }
@@ -26,9 +27,18 @@ export async function generateMetadata({ params }: Props) {
 
 const genderLabel = { men: "Men's", women: "Women's", coed: 'Co-ed' }
 const genderClass = {
-  men: 'bg-blue-400/10 text-blue-400 border-blue-400/20',
-  women: 'bg-pink-400/10 text-pink-400 border-pink-400/20',
-  coed: 'bg-purple-400/10 text-purple-400 border-purple-400/20',
+  men: 'text-blue-700 bg-blue-50 border-blue-200',
+  women: 'text-pink-700 bg-pink-50 border-pink-200',
+  coed: 'text-purple-700 bg-purple-50 border-purple-200',
+}
+
+function formatLastUpdated(updatedAt: string): string {
+  const now = new Date()
+  const updated = new Date(updatedAt)
+  const diffDays = Math.floor((now.getTime() - updated.getTime()) / (1000 * 60 * 60 * 24))
+  if (diffDays === 0) return 'Updated today'
+  if (diffDays <= 7) return `Updated ${diffDays} day${diffDays === 1 ? '' : 's'} ago`
+  return `Updated ${updated.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
 }
 
 export default async function ListingPage({ params }: Props) {
@@ -52,16 +62,31 @@ export default async function ListingPage({ params }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-      {/* Back */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-1.5 text-sm text-fg-secondary hover:text-fg-primary transition-colors mb-6"
-      >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        Back to directory
-      </Link>
+      {/* Back + actions */}
+      <div className="flex items-center justify-between mb-6 print:hidden">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-sm text-fg-secondary hover:text-fg-primary transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to directory
+        </Link>
+        <div className="flex items-center gap-2">
+          <ShareButton title={listing.name} />
+          <button
+            onClick={() => window.print()}
+            className="btn-secondary text-xs flex items-center gap-1.5 print:hidden"
+            suppressHydrationWarning
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Print
+          </button>
+        </div>
+      </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Main content */}
@@ -85,8 +110,8 @@ export default async function ListingPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <div className="aspect-video bg-bg-elevated rounded-lg flex items-center justify-center">
-              <svg className="w-16 h-16 text-fg-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="aspect-video bg-bg-secondary rounded-lg flex items-center justify-center border border-border">
+              <svg className="w-16 h-16 text-fg-muted/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
               </svg>
             </div>
@@ -98,7 +123,7 @@ export default async function ListingPage({ params }: Props) {
               <h1 className="text-2xl font-bold text-fg-primary">{listing.name}</h1>
               <div className="flex items-center gap-2 shrink-0">
                 {listing.verified && (
-                  <span className="badge badge-sage">
+                  <span className="badge-accent">
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
@@ -111,9 +136,14 @@ export default async function ListingPage({ params }: Props) {
               </div>
             </div>
 
-            <p className="text-fg-secondary text-sm mb-4">
-              {listing.city}, {listing.county} County · {listing.zip}
-            </p>
+            <div className="flex items-center gap-3 mb-4 flex-wrap">
+              <p className="text-fg-secondary text-sm">
+                {listing.city}, {listing.county} County · {listing.zip}
+              </p>
+              <span className="text-fg-muted text-xs">
+                {formatLastUpdated(listing.updated_at)}
+              </span>
+            </div>
 
             <div className="flex flex-wrap gap-4 text-sm">
               <div>
@@ -161,9 +191,7 @@ export default async function ListingPage({ params }: Props) {
               <h2 className="font-semibold text-fg-primary mb-3">Amenities</h2>
               <div className="flex flex-wrap gap-2">
                 {amenities.map((a: any) => (
-                  <span key={a.id} className="badge-muted">
-                    {a.name}
-                  </span>
+                  <span key={a.id} className="badge-muted">{a.name}</span>
                 ))}
               </div>
             </div>
@@ -178,21 +206,29 @@ export default async function ListingPage({ params }: Props) {
               </p>
             </div>
           )}
+
+          {/* Print-only contact block */}
+          <div className="hidden print:block border-t border-gray-200 pt-4 mt-4">
+            <h2 className="font-semibold text-gray-900 mb-2">Contact</h2>
+            {listing.phone && <p className="text-sm text-gray-700">Phone: {listing.phone}</p>}
+            {listing.email && <p className="text-sm text-gray-700">Email: {listing.email}</p>}
+            {listing.website && <p className="text-sm text-gray-700">Website: {listing.website}</p>}
+            <p className="text-xs text-gray-400 mt-4">9090homes.com — Find a home. Start your 90.</p>
+          </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-4">
+        {/* Sidebar — hidden in print */}
+        <div className="space-y-4 print:hidden">
           {/* Contact card */}
           <div className="card p-4 sticky top-20">
             <h2 className="font-semibold text-fg-primary mb-4">Get in touch</h2>
 
-            {/* Direct contact info */}
             {(listing.phone || listing.email || listing.website) && (
               <div className="space-y-2 mb-4 pb-4 border-b border-border">
                 {listing.phone && (
                   <a
                     href={`tel:${listing.phone}`}
-                    className="flex items-center gap-2 text-sm text-fg-secondary hover:text-sage transition-colors"
+                    className="flex items-center gap-2 text-sm text-fg-secondary hover:text-accent transition-colors"
                   >
                     <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -205,7 +241,7 @@ export default async function ListingPage({ params }: Props) {
                     href={listing.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-fg-secondary hover:text-sage transition-colors"
+                    className="flex items-center gap-2 text-sm text-fg-secondary hover:text-accent transition-colors"
                   >
                     <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" />
@@ -216,7 +252,6 @@ export default async function ListingPage({ params }: Props) {
               </div>
             )}
 
-            {/* Contact form */}
             <ContactForm
               listingId={listing.id}
               listingName={listing.name}
@@ -236,7 +271,7 @@ export default async function ListingPage({ params }: Props) {
               href={`https://maps.google.com/?q=${encodeURIComponent(listing.address + ', ' + listing.city + ', CA')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-sage hover:text-sage-light transition-colors mt-2 inline-block"
+              className="text-xs text-accent hover:text-accent-dark transition-colors mt-2 inline-block"
             >
               Open in Google Maps →
             </a>

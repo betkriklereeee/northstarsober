@@ -154,7 +154,6 @@ export default function ListingForm({ listing, amenities, userId, mode }: Listin
       if (dbError) { setError(dbError.message); setSaving(false); return }
     }
 
-    // Sync amenities
     if (listingId) {
       await supabase.from('listing_amenities').delete().eq('listing_id', listingId)
       if (selectedAmenities.length > 0) {
@@ -197,8 +196,8 @@ export default function ListingForm({ listing, amenities, userId, mode }: Listin
                   onClick={() => update({ gender: g })}
                   className={`px-4 py-2 transition-colors ${
                     form.gender === g
-                      ? 'bg-sage text-bg-primary font-medium'
-                      : 'text-fg-secondary hover:text-fg-primary hover:bg-bg-elevated'
+                      ? 'bg-accent text-white font-medium'
+                      : 'text-fg-secondary hover:text-fg-primary hover:bg-bg-secondary bg-bg-card'
                   }`}
                 >
                   {g === 'men' ? "Men's" : g === 'women' ? "Women's" : 'Co-ed'}
@@ -276,7 +275,7 @@ export default function ListingForm({ listing, amenities, userId, mode }: Listin
               {geocoding ? 'Verifying…' : 'Verify address'}
             </button>
             {geocoded && (
-              <span className="flex items-center gap-1.5 text-xs text-sage">
+              <span className="flex items-center gap-1.5 text-xs text-accent">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
@@ -341,7 +340,7 @@ export default function ListingForm({ listing, amenities, userId, mode }: Listin
                 type="checkbox"
                 checked={form.pet_friendly}
                 onChange={(e) => update({ pet_friendly: e.target.checked })}
-                className="w-4 h-4 rounded accent-sage"
+                className="w-4 h-4 rounded accent-[#4a7fa5]"
               />
               <span className="text-sm text-fg-secondary">Pet friendly</span>
             </label>
@@ -350,7 +349,7 @@ export default function ListingForm({ listing, amenities, userId, mode }: Listin
                 type="checkbox"
                 checked={form.mat_friendly}
                 onChange={(e) => update({ mat_friendly: e.target.checked })}
-                className="w-4 h-4 rounded accent-sage"
+                className="w-4 h-4 rounded accent-[#4a7fa5]"
               />
               <span className="text-sm text-fg-secondary">MAT friendly</span>
             </label>
@@ -400,8 +399,8 @@ export default function ListingForm({ listing, amenities, userId, mode }: Listin
               onClick={() => toggleAmenity(a.id)}
               className={`badge border transition-colors ${
                 selectedAmenities.includes(a.id)
-                  ? 'bg-sage-faint text-sage border-sage/30'
-                  : 'bg-bg-elevated text-fg-secondary border-border hover:border-border-light'
+                  ? 'bg-accent-faint text-accent border-accent/30'
+                  : 'bg-bg-secondary text-fg-secondary border-border hover:border-accent/30 hover:text-accent'
               }`}
             >
               {a.name}
@@ -463,7 +462,7 @@ export default function ListingForm({ listing, amenities, userId, mode }: Listin
       </section>
 
       {error && (
-        <p className="text-sm text-red-400 bg-red-400/10 rounded px-4 py-3">{error}</p>
+        <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded px-4 py-3">{error}</p>
       )}
 
       <div className="flex items-center gap-3 pt-2 pb-8">

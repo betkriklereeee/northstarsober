@@ -48,7 +48,7 @@ export default function SearchFilters({
   }
 
   return (
-    <div className="bg-bg-secondary border-b border-border px-4 py-3 space-y-3">
+    <div className="bg-bg-card border-b border-border px-4 py-3 space-y-3">
       {/* Search bar */}
       <div className="relative">
         <svg
@@ -80,7 +80,7 @@ export default function SearchFilters({
 
       {/* Quick filters row */}
       <div className="flex items-center gap-2 flex-wrap">
-        {/* Gender */}
+        {/* Gender toggle */}
         <div className="flex rounded border border-border overflow-hidden text-xs">
           {(['', 'men', 'women', 'coed'] as const).map((g) => (
             <button
@@ -89,8 +89,8 @@ export default function SearchFilters({
               className={cn(
                 'px-2.5 py-1.5 transition-colors',
                 filters.gender === g
-                  ? 'bg-sage text-bg-primary font-medium'
-                  : 'text-fg-secondary hover:text-fg-primary hover:bg-bg-elevated'
+                  ? 'bg-accent text-white font-medium'
+                  : 'text-fg-secondary hover:text-fg-primary hover:bg-bg-secondary bg-bg-card'
               )}
             >
               {g === '' ? 'All' : g === 'men' ? "Men's" : g === 'women' ? "Women's" : 'Co-ed'}
@@ -102,7 +102,7 @@ export default function SearchFilters({
           onClick={() => setExpanded(!expanded)}
           className={cn(
             'btn-secondary text-xs py-1.5 flex items-center gap-1.5',
-            hasActiveFilters && !expanded ? 'border-sage/50 text-sage' : ''
+            hasActiveFilters && !expanded ? 'border-accent/50 text-accent' : ''
           )}
         >
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -110,7 +110,7 @@ export default function SearchFilters({
           </svg>
           Filters
           {hasActiveFilters && (
-            <span className="w-1.5 h-1.5 rounded-full bg-sage" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
           )}
         </button>
 
@@ -197,7 +197,7 @@ export default function SearchFilters({
                 type="checkbox"
                 checked={filters.petFriendly}
                 onChange={(e) => update({ petFriendly: e.target.checked })}
-                className="w-4 h-4 rounded border-border bg-bg-tertiary accent-sage"
+                className="w-4 h-4 rounded border-border accent-[#4a7fa5]"
               />
               <span className="text-xs text-fg-secondary">Pet friendly</span>
             </label>
@@ -206,7 +206,7 @@ export default function SearchFilters({
                 type="checkbox"
                 checked={filters.matFriendly}
                 onChange={(e) => update({ matFriendly: e.target.checked })}
-                className="w-4 h-4 rounded border-border bg-bg-tertiary accent-sage"
+                className="w-4 h-4 rounded border-border accent-[#4a7fa5]"
               />
               <span className="text-xs text-fg-secondary">MAT friendly</span>
             </label>

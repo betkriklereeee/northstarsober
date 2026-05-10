@@ -16,7 +16,6 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const popupRef = useRef<mapboxgl.Popup | null>(null)
-  const markersRef = useRef<Map<string, mapboxgl.Marker>>(new Map())
 
   const flyTo = useCallback((listing: Listing) => {
     mapRef.current?.flyTo({
@@ -26,7 +25,6 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
     })
   }, [])
 
-  // Fly to selected listing from outside
   useEffect(() => {
     if (!selectedId || !mapRef.current) return
     const listing = listings.find((l) => l.id === selectedId)
@@ -40,7 +38,7 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
 
     const map = new mapboxgl.Map({
       container: containerRef.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
+      style: 'mapbox://styles/mapbox/light-v11',
       center: [-119.4, 36.8],
       zoom: 5.5,
       minZoom: 4,
@@ -68,11 +66,11 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
         source: 'listings',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#7a9e7e',
+          'circle-color': '#4a7fa5',
           'circle-radius': ['step', ['get', 'point_count'], 16, 5, 22, 20, 28],
           'circle-opacity': 0.9,
           'circle-stroke-width': 2,
-          'circle-stroke-color': '#0f0f0f',
+          'circle-stroke-color': '#ffffff',
         },
       })
 
@@ -87,7 +85,7 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
           'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
           'text-size': 11,
         },
-        paint: { 'text-color': '#0f0f0f' },
+        paint: { 'text-color': '#ffffff' },
       })
 
       // Individual points
@@ -100,12 +98,12 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
           'circle-color': [
             'case',
             ['==', ['get', 'id'], selectedId ?? ''],
-            '#9ab89e',
-            '#7a9e7e',
+            '#6b9fc4',
+            '#4a7fa5',
           ],
           'circle-radius': 9,
           'circle-stroke-width': 2,
-          'circle-stroke-color': '#0f0f0f',
+          'circle-stroke-color': '#ffffff',
           'circle-opacity': 0.95,
         },
       })
@@ -123,7 +121,7 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
         })
       })
 
-      // Click individual pin → show popup + highlight card
+      // Click individual pin
       map.on('click', 'unclustered-point', (e) => {
         const feature = e.features?.[0]
         if (!feature) return
@@ -137,11 +135,11 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
         popupRef.current = new mapboxgl.Popup({ closeButton: true, maxWidth: '240px' })
           .setLngLat(coords)
           .setHTML(`
-            <div class="p-3">
-              <p class="text-xs text-[#a09b96] mb-0.5">${city} · ${formatGender(gender as any)}</p>
-              <p class="font-medium text-sm text-[#f0ede8] mb-1">${name}</p>
-              <p class="text-xs text-[#7a9e7e] mb-2">${formatPrice(price_min, price_max)}</p>
-              <a href="/listings/${slug}" class="text-xs text-[#7a9e7e] hover:text-[#9ab89e] underline">View details →</a>
+            <div style="padding: 12px;">
+              <p style="font-size: 11px; color: #718096; margin: 0 0 2px 0;">${city} · ${formatGender(gender as any)}</p>
+              <p style="font-weight: 600; font-size: 14px; color: #0f1923; margin: 0 0 4px 0;">${name}</p>
+              <p style="font-size: 12px; color: #4a7fa5; margin: 0 0 8px 0;">${formatPrice(price_min, price_max)}</p>
+              <a href="/listings/${slug}" style="font-size: 12px; color: #4a7fa5; text-decoration: underline;">View details →</a>
             </div>
           `)
           .addTo(map)
@@ -161,17 +159,13 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Update GeoJSON when listings change
   useEffect(() => {
     const map = mapRef.current
     if (!map || !map.isStyleLoaded()) return
     const source = map.getSource('listings') as mapboxgl.GeoJSONSource | undefined
-    if (source) {
-      source.setData(listingsToGeoJSON(listings))
-    }
+    if (source) source.setData(listingsToGeoJSON(listings))
   }, [listings])
 
-  // Update selected pin color
   useEffect(() => {
     const map = mapRef.current
     if (!map || !map.isStyleLoaded()) return
@@ -179,13 +173,11 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
       map.setPaintProperty('unclustered-point', 'circle-color', [
         'case',
         ['==', ['get', 'id'], selectedId ?? ''],
-        '#9ab89e',
-        '#7a9e7e',
+        '#6b9fc4',
+        '#4a7fa5',
       ])
     }
   }, [selectedId])
 
-  return (
-    <div ref={containerRef} className="w-full h-full" />
-  )
+  return <div ref={containerRef} className="w-full h-full" />
 }
