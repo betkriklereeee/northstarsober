@@ -12,17 +12,21 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const supabase = createClient()
-  const { data } = await supabase
-    .from('listings')
-    .select('name, city, description')
-    .eq('slug', params.slug)
-    .single()
+  try {
+    const supabase = createClient()
+    const { data } = await supabase
+      .from('listings')
+      .select('name, city, description')
+      .eq('slug', params.slug)
+      .single()
 
-  if (!data) return { title: 'Not found' }
-  return {
-    title: `${data.name} — 9090 Homes`,
-    description: data.description ?? `Sober living in ${data.city}, California.`,
+    if (!data) return { title: 'Not found' }
+    return {
+      title: `${data.name} — 9090 Homes`,
+      description: data.description ?? `Sober living in ${data.city}, California.`,
+    }
+  } catch {
+    return { title: '9090 Homes' }
   }
 }
 

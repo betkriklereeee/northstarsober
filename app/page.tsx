@@ -5,23 +5,29 @@ import type { Listing } from '@/lib/supabase/types'
 export const revalidate = 60
 
 export default async function HomePage() {
-  const supabase = createClient()
+  let flat: Listing[] = []
 
-  const { data: listings } = await supabase
-    .from('listings')
-    .select(`
-      *,
-      listing_amenities (
-        amenities (id, name, slug)
-      )
-    `)
-    .eq('status', 'live')
-    .order('created_at', { ascending: false })
+  try {
+    const supabase = createClient()
+    const { data: listings } = await supabase
+      .from('listings')
+      .select(`
+        *,
+        listing_amenities (
+          amenities (id, name, slug)
+        )
+      `)
+      .eq('status', 'live')
+      .order('created_at', { ascending: false })
 
-  const flat: Listing[] = (listings ?? []).map((l: any) => ({
-    ...l,
-    amenities: l.listing_amenities?.map((la: any) => la.amenities) ?? [],
-  }))
+    flat = (listings ?? []).map((l: any) => ({
+      ...l,
+      amenities: l.listing_amenities?.map((la: any) => la.amenities) ?? [],
+    }))
+  } catch (e) {
+    // DB unavailable at build time (e.g. missing env vars) — render with empty list
+    console.warn('[9090 Homes] Could not fetch listings:', (e as Error).message)
+  }
 
   return (
     <>
