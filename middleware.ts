@@ -28,7 +28,13 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data.user
+  } catch {
+    // Supabase unreachable (e.g. placeholder env vars) — allow request through
+  }
 
   const isOperatorRoute = request.nextUrl.pathname.startsWith('/operator/dashboard') ||
     request.nextUrl.pathname.startsWith('/operator/listings')
