@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { formatPrice, formatGender, formatBeds } from '@/lib/utils'
+import { JsonLd } from '@/components/json-ld'
 import ContactForm from './contact-form'
 import ShareButton from './share-button'
 import PrintButton from './print-button'
@@ -22,11 +23,11 @@ export async function generateMetadata({ params }: Props) {
 
     if (!data) return { title: 'Not found' }
     return {
-      title: `${data.name} — 9090 Homes`,
+      title: data.name,
       description: data.description ?? `Sober living in ${data.city}, California.`,
     }
   } catch {
-    return { title: '9090 Homes' }
+    return { title: 'Northstar Sober' }
   }
 }
 
@@ -65,7 +66,27 @@ export default async function ListingPage({ params }: Props) {
 
   const amenities = listing.listing_amenities?.map((la: any) => la.amenities) ?? []
 
+  const listingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'LodgingBusiness',
+    name: listing.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: listing.address,
+      addressLocality: listing.city,
+      addressRegion: 'CA',
+      postalCode: listing.zip ?? '',
+      addressCountry: 'US',
+    },
+    ...(listing.phone && { telephone: listing.phone }),
+    ...(listing.description && { description: listing.description }),
+    ...(listing.photos?.[0] && { image: listing.photos[0] }),
+    url: `https://cashpaysober.com/listings/${listing.slug}`,
+  }
+
   return (
+    <>
+    <JsonLd data={listingSchema} />
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
       {/* Back + actions */}
       <div className="flex items-center justify-between mb-6 print:hidden">
@@ -209,7 +230,7 @@ export default async function ListingPage({ params }: Props) {
             {listing.phone && <p className="text-sm text-gray-700">Phone: {listing.phone}</p>}
             {listing.email && <p className="text-sm text-gray-700">Email: {listing.email}</p>}
             {listing.website && <p className="text-sm text-gray-700">Website: {listing.website}</p>}
-            <p className="text-xs text-gray-400 mt-4">9090homes.com — Find a home. Start your 90.</p>
+            <p className="text-xs text-gray-400 mt-4">cashpaysober.com — Find your footing. Start now.</p>
           </div>
         </div>
 
@@ -275,5 +296,6 @@ export default async function ListingPage({ params }: Props) {
         </div>
       </div>
     </div>
+    </>
   )
 }

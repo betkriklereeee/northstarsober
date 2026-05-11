@@ -11,20 +11,20 @@ html {
 }
 
 body {
-  background-color: #f8f9fa;
-  color: #0f1923;
+  background-color: #faf7f2;
+  color: #1a1208;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Mapbox overrides — light theme */
+/* Mapbox overrides — warm theme */
 .mapboxgl-popup-content {
   background: #ffffff !important;
-  border: 1px solid #dee2e6 !important;
+  border: 1px solid #e8ddc8 !important;
   border-radius: 0.5rem !important;
   padding: 0 !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
-  color: #0f1923 !important;
+  box-shadow: 0 4px 16px rgba(26, 18, 8, 0.10) !important;
+  color: #1a1208 !important;
 }
 
 .mapboxgl-popup-tip {
@@ -32,7 +32,7 @@ body {
 }
 
 .mapboxgl-popup-close-button {
-  color: #718096 !important;
+  color: #9c7f52 !important;
   font-size: 1.25rem !important;
   padding: 0.5rem !important;
   right: 0.25rem !important;
@@ -41,22 +41,22 @@ body {
 }
 
 .mapboxgl-popup-close-button:hover {
-  color: #0f1923 !important;
+  color: #1a1208 !important;
   background: transparent !important;
 }
 
 .mapboxgl-ctrl-attrib {
-  background: rgba(248, 249, 250, 0.9) !important;
-  color: #718096 !important;
+  background: rgba(250, 247, 242, 0.9) !important;
+  color: #9c7f52 !important;
 }
 
 .mapboxgl-ctrl-attrib a {
-  color: #4a7fa5 !important;
+  color: #c97b2e !important;
 }
 
 .mapboxgl-ctrl button {
   background-color: #ffffff !important;
-  border: 1px solid #dee2e6 !important;
+  border: 1px solid #e8ddc8 !important;
 }
 
 .mapboxgl-ctrl button .mapboxgl-ctrl-icon {
@@ -70,21 +70,21 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f8f9fa;
+  background: #faf7f2;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #dee2e6;
+  background: #e8ddc8;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c5ddf0;
+  background: #e0bc7a;
 }
 
 /* Focus ring */
 :focus-visible {
-  outline: 2px solid #4a7fa5;
+  outline: 2px solid #c97b2e;
   outline-offset: 2px;
 }
 
@@ -92,33 +92,33 @@ body {
 @media print {
   body {
     background: #ffffff;
-    color: #0f1923;
+    color: #1a1208;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-[#4a7fa5] text-white font-medium px-4 py-2 rounded hover:bg-[#2d6a8f] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a7fa5] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8f9fa] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-accent text-white font-medium px-4 py-2 rounded hover:bg-accent-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-[#ffffff] text-[#0f1923] font-medium px-4 py-2 rounded border border-[#dee2e6] hover:border-[#c5ddf0] hover:bg-[#f1f3f5] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4a7fa5] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8f9fa] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-bg-card text-fg-primary font-medium px-4 py-2 rounded border border-border hover:border-border-accent hover:bg-bg-secondary transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
-    @apply text-[#4a5568] hover:text-[#0f1923] px-3 py-1.5 rounded transition-colors duration-150 text-sm hover:bg-[#f1f3f5];
+    @apply text-fg-secondary hover:text-fg-primary px-3 py-1.5 rounded transition-colors duration-150 text-sm hover:bg-bg-secondary;
   }
 
   .input-field {
-    @apply w-full bg-[#ffffff] border border-[#dee2e6] text-[#0f1923] placeholder-[#718096] rounded px-3 py-2 text-sm focus:outline-none focus:border-[#4a7fa5] focus:ring-1 focus:ring-[#4a7fa5] transition-colors duration-150;
+    @apply w-full bg-bg-card border border-border text-fg-primary placeholder-fg-muted rounded px-3 py-2 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors duration-150;
   }
 
   .label {
-    @apply block text-xs font-medium text-[#4a5568] uppercase tracking-wider mb-1.5;
+    @apply block text-xs font-medium text-fg-secondary uppercase tracking-wider mb-1.5;
   }
 
   .card {
-    @apply bg-[#ffffff] border border-[#dee2e6] rounded-lg overflow-hidden;
+    @apply bg-bg-card border border-border rounded-lg overflow-hidden;
   }
 
   .badge {
@@ -126,14 +126,14 @@ body {
   }
 
   .badge-accent {
-    @apply badge bg-[#e8f1f8] text-[#4a7fa5] border border-[#4a7fa5]/30;
+    @apply badge bg-accent-faint text-accent border border-accent/30;
   }
 
   .badge-muted {
-    @apply badge bg-[#f1f3f5] text-[#4a5568] border border-[#dee2e6];
+    @apply badge bg-bg-secondary text-fg-secondary border border-border;
   }
 
   .section-title {
-    @apply text-xs font-medium text-[#718096] uppercase tracking-widest;
+    @apply text-xs font-medium text-fg-muted uppercase tracking-widest;
   }
 }

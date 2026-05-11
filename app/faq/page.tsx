@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { JsonLd } from '@/components/json-ld'
 
 interface FAQItem {
   q: string
@@ -27,7 +28,7 @@ const FOR_SEARCHERS: FAQItem[] = [
   },
   {
     q: 'How do I know a listing is legitimate?',
-    a: "Every listing on 9090 Homes is reviewed by our team before it goes live. We verify that homes exist and are operating. We also show a Verified badge on listings we've confirmed directly with the operator. That said, always call before you commit — and trust your gut.",
+    a: "Every listing on Northstar Sober is reviewed by our team before it goes live. We verify that homes exist and are operating. We also show a Verified badge on listings we've confirmed directly with the operator. That said, always call before you commit — and trust your gut.",
   },
   {
     q: 'What should I look for in a sober living home?',
@@ -65,6 +66,23 @@ const FOR_OPERATORS: FAQItem[] = [
     a: 'Yes. Your operator account can manage as many listings as you have homes. Submit each one separately through your dashboard.',
   },
 ]
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    ...FOR_SEARCHERS.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+    ...FOR_OPERATORS.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  ],
+}
 
 function AccordionGroup({ items, openState, toggle }: {
   items: FAQItem[]
@@ -132,46 +150,49 @@ export default function FAQPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-      <div className="mb-10">
-        <p className="section-title mb-3">Frequently asked questions</p>
-        <h1 className="text-3xl font-bold text-fg-primary">
-          Common questions answered.
-        </h1>
+    <>
+      <JsonLd data={faqSchema} />
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+        <div className="mb-10">
+          <p className="section-title mb-3">Frequently asked questions</p>
+          <h1 className="text-3xl font-bold text-fg-primary">
+            Common questions answered.
+          </h1>
+        </div>
+
+        <section className="mb-10">
+          <h2 className="text-lg font-bold text-fg-primary mb-4 flex items-center gap-2">
+            <span className="w-6 h-6 rounded-full bg-accent-faint text-accent text-xs flex items-center justify-center font-bold">S</span>
+            For those searching
+          </h2>
+          <AccordionGroup
+            items={FOR_SEARCHERS}
+            openState={searchersOpen}
+            toggle={toggleSearcher}
+          />
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-lg font-bold text-fg-primary mb-4 flex items-center gap-2">
+            <span className="w-6 h-6 rounded-full bg-accent-faint text-accent text-xs flex items-center justify-center font-bold">O</span>
+            For operators
+          </h2>
+          <AccordionGroup
+            items={FOR_OPERATORS}
+            openState={operatorsOpen}
+            toggle={toggleOperator}
+          />
+        </section>
+
+        <div className="bg-accent-faint border border-accent/20 rounded-lg p-6 text-center">
+          <p className="text-sm text-fg-secondary mb-4">
+            Still have questions? The best way to learn about a home is to reach out directly.
+          </p>
+          <Link href="/" className="btn-primary text-sm">
+            Search homes
+          </Link>
+        </div>
       </div>
-
-      <section className="mb-10">
-        <h2 className="text-lg font-bold text-fg-primary mb-4 flex items-center gap-2">
-          <span className="w-6 h-6 rounded-full bg-accent-faint text-accent text-xs flex items-center justify-center font-bold">S</span>
-          For those searching
-        </h2>
-        <AccordionGroup
-          items={FOR_SEARCHERS}
-          openState={searchersOpen}
-          toggle={toggleSearcher}
-        />
-      </section>
-
-      <section className="mb-12">
-        <h2 className="text-lg font-bold text-fg-primary mb-4 flex items-center gap-2">
-          <span className="w-6 h-6 rounded-full bg-accent-faint text-accent text-xs flex items-center justify-center font-bold">O</span>
-          For operators
-        </h2>
-        <AccordionGroup
-          items={FOR_OPERATORS}
-          openState={operatorsOpen}
-          toggle={toggleOperator}
-        />
-      </section>
-
-      <div className="bg-accent-faint border border-accent/20 rounded-lg p-6 text-center">
-        <p className="text-sm text-fg-secondary mb-4">
-          Still have questions? The best way to learn about a home is to reach out directly.
-        </p>
-        <Link href="/" className="btn-primary text-sm">
-          Search homes
-        </Link>
-      </div>
-    </div>
+    </>
   )
 }

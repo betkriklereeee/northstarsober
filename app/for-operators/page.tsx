@@ -2,15 +2,15 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'For Operators — 9090 Homes',
-  description: 'List your California sober living home for free on 9090 Homes. No referral fees, no contracts.',
+  title: 'For Operators',
+  description: 'List your California sober living home for free on Northstar Sober. No referral fees, no contracts.',
 }
 
 export default function ForOperatorsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
       {/* Hero */}
-      <section className="text-center py-10 mb-12">
+      <section className="text-center py-20 mb-12">
         <p className="section-title mb-3">For sober living operators</p>
         <h1 className="text-3xl sm:text-4xl font-bold text-fg-primary mb-4 leading-tight">
           Reach families who are actively looking.
@@ -19,15 +19,20 @@ export default function ForOperatorsPage() {
           List your sober living home for free. No referral fees. No contracts.
           Just a directory that works.
         </p>
-        <Link href="/operator/signup" className="btn-primary text-base px-6 py-3">
-          List your home →
-        </Link>
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          <Link href="/operator/signup" className="btn-primary text-base px-6 py-3">
+            List your home →
+          </Link>
+          <Link href="#how-it-works" className="btn-secondary text-base px-6 py-3">
+            Learn more
+          </Link>
+        </div>
       </section>
 
       {/* Benefits */}
       <section className="mb-14">
         <h2 className="text-xl font-bold text-fg-primary mb-6 text-center">
-          Why list on 9090 Homes
+          Why list on Northstar Sober
         </h2>
         <div className="grid sm:grid-cols-2 gap-4">
           {[
@@ -62,7 +67,7 @@ export default function ForOperatorsPage() {
       </section>
 
       {/* How it works */}
-      <section className="mb-14">
+      <section id="how-it-works" className="mb-14">
         <h2 className="text-xl font-bold text-fg-primary mb-6">How it works</h2>
         <div className="space-y-4">
           {[

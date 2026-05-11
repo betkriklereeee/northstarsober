@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import DirectoryView from '@/components/directory-view'
+import { JsonLd } from '@/components/json-ld'
 import type { Listing } from '@/lib/supabase/types'
 
 export const revalidate = 60
@@ -25,25 +26,50 @@ export default async function HomePage() {
       amenities: l.listing_amenities?.map((la: any) => la.amenities) ?? [],
     }))
   } catch (e) {
-    // DB unavailable at build time (e.g. missing env vars) — render with empty list
-    console.warn('[9090 Homes] Could not fetch listings:', (e as Error).message)
+    console.warn('[Northstar Sober] Could not fetch listings:', (e as Error).message)
   }
 
   return (
     <>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'Northstar Sober',
+          url: 'https://cashpaysober.com',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: 'https://cashpaysober.com/?q={search_term_string}',
+            'query-input': 'required name=search_term_string',
+          },
+        }}
+      />
+
       {/* Hero */}
-      <div className="bg-bg-card border-b border-border px-6 py-10 text-center">
+      <div className="bg-bg-card border-b border-border px-6 py-20 text-center">
         <p className="text-xs font-medium tracking-widest text-accent uppercase mb-3">
           California Sober Living Directory
         </p>
         <h1 className="text-3xl sm:text-4xl font-bold text-fg-primary mb-3 tracking-tight">
-          Find a home.{' '}
-          <span className="text-accent">Start your 90.</span>
+          Find your footing.{' '}
+          <span className="text-accent">Start now.</span>
         </h1>
         <p className="text-fg-secondary text-sm max-w-xl mx-auto leading-relaxed">
           Verified, cash-pay sober living homes across California. Real houses, real communities.
           Search by city, county, or zip — no ads, no upsells.
         </p>
+        <p className="text-fg-secondary text-sm max-w-xl mx-auto leading-relaxed mt-3">
+          Every listing is reviewed before it goes live. Cash pay only. No insurance billing, no
+          referral fees — just homes.
+        </p>
+        <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
+          <a href="/#directory" className="btn-primary">
+            Search Homes
+          </a>
+          <a href="/operator/signup" className="btn-secondary">
+            List Your Home
+          </a>
+        </div>
         <div className="flex items-center justify-center gap-4 mt-6 text-xs text-fg-muted flex-wrap">
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-accent" />
