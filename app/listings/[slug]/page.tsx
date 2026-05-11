@@ -3,25 +3,31 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { formatPrice, formatGender, formatBeds } from '@/lib/utils'
+import { JsonLd } from '@/components/json-ld'
 import ContactForm from './contact-form'
 import ShareButton from './share-button'
+import PrintButton from './print-button'
 
 interface Props {
   params: { slug: string }
 }
 
 export async function generateMetadata({ params }: Props) {
-  const supabase = createClient()
-  const { data } = await supabase
-    .from('listings')
-    .select('name, city, description')
-    .eq('slug', params.slug)
-    .single()
+  try {
+    const supabase = createClient()
+    const { data } = await supabase
+      .from('listings')
+      .select('name, city, description')
+      .eq('slug', params.slug)
+      .single()
 
-  if (!data) return { title: 'Not found' }
-  return {
-    title: `${data.name} — 9090 Homes`,
-    description: data.description ?? `Sober living in ${data.city}, California.`,
+    if (!data) return { title: 'Not found' }
+    return {
+      title: data.name,
+      description: data.description ?? `Sober living in ${data.city}, California.`,
+    }
+  } catch {
+    return { title: 'Northstar Sober' }
   }
 }
 
@@ -60,7 +66,27 @@ export default async function ListingPage({ params }: Props) {
 
   const amenities = listing.listing_amenities?.map((la: any) => la.amenities) ?? []
 
+  const listingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'LodgingBusiness',
+    name: listing.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: listing.address,
+      addressLocality: listing.city,
+      addressRegion: 'CA',
+      postalCode: listing.zip ?? '',
+      addressCountry: 'US',
+    },
+    ...(listing.phone && { telephone: listing.phone }),
+    ...(listing.description && { description: listing.description }),
+    ...(listing.photos?.[0] && { image: listing.photos[0] }),
+    url: `https://cashpaysober.com/listings/${listing.slug}`,
+  }
+
   return (
+    <>
+    <JsonLd data={listingSchema} />
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
       {/* Back + actions */}
       <div className="flex items-center justify-between mb-6 print:hidden">
@@ -75,16 +101,7 @@ export default async function ListingPage({ params }: Props) {
         </Link>
         <div className="flex items-center gap-2">
           <ShareButton title={listing.name} />
-          <button
-            onClick={() => window.print()}
-            className="btn-secondary text-xs flex items-center gap-1.5 print:hidden"
-            suppressHydrationWarning
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-            </svg>
-            Print
-          </button>
+          <PrintButton />
         </div>
       </div>
 
@@ -213,7 +230,7 @@ export default async function ListingPage({ params }: Props) {
             {listing.phone && <p className="text-sm text-gray-700">Phone: {listing.phone}</p>}
             {listing.email && <p className="text-sm text-gray-700">Email: {listing.email}</p>}
             {listing.website && <p className="text-sm text-gray-700">Website: {listing.website}</p>}
-            <p className="text-xs text-gray-400 mt-4">9090homes.com — Find a home. Start your 90.</p>
+            <p className="text-xs text-gray-400 mt-4">cashpaysober.com — Find your footing. Start now.</p>
           </div>
         </div>
 
@@ -279,5 +296,6 @@ export default async function ListingPage({ params }: Props) {
         </div>
       </div>
     </div>
+    </>
   )
 }

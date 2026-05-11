@@ -1,0 +1,47 @@
+
+> 9090homes@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/15) ...
+   Generating static pages (3/15) 
+   Generating static pages (7/15) 
+   Generating static pages (11/15) 
+ ✓ Generating static pages (15/15)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ƒ /                                    5.98 kB         108 kB
+├ ○ /_not-found                          137 B          87.9 kB
+├ ○ /about                               187 B          96.6 kB
+├ ƒ /admin                               749 B          97.2 kB
+├ ƒ /admin/listings/[id]                 762 B           102 kB
+├ ƒ /api/admin/listings                  0 B                0 B
+├ ƒ /api/contact                         0 B                0 B
+├ ○ /faq                                 2.9 kB         99.4 kB
+├ ○ /for-operators                       187 B          96.6 kB
+├ ƒ /listings/[slug]                     1.73 kB         103 kB
+├ ƒ /operator/dashboard                  187 B          96.6 kB
+├ ƒ /operator/listings/[id]/edit         148 B           170 kB
+├ ƒ /operator/listings/new               148 B           170 kB
+├ ○ /operator/login                      1.26 kB         161 kB
+├ ○ /operator/signup                     1.41 kB         161 kB
+└ ○ /resources                           187 B          96.6 kB
++ First Load JS shared by all            87.8 kB
+  ├ chunks/117-3d33f1980da5cbc7.js       31.7 kB
+  ├ chunks/fd9d1056-1ac2737fcdb1471b.js  53.7 kB
+  └ other shared chunks (total)          2.41 kB
+
+
+ƒ Middleware                             81 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

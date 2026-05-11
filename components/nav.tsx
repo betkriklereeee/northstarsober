@@ -39,10 +39,10 @@ export default function Nav() {
         <Link
           href="/"
           className="flex items-center gap-2.5 shrink-0"
-          aria-label="9090 Homes"
+          aria-label="Northstar Sober"
         >
-          <span className="text-accent font-bold text-lg tracking-tight">9090</span>
-          <span className="text-fg-primary font-medium text-sm hidden sm:inline">Homes</span>
+          <span className="text-accent font-bold text-lg tracking-tight">Northstar</span>
+          <span className="text-fg-primary font-medium text-sm hidden sm:inline">Sober</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-0.5">
