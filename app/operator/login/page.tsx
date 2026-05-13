@@ -38,8 +38,11 @@ function LoginContent() {
     <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4 py-12 bg-bg-primary">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="text-2xl font-bold text-accent mb-1">9090</div>
-          <h1 className="text-xl font-semibold text-fg-primary">Operator sign in</h1>
+          <div className="mb-2">
+            <span className="text-accent font-bold text-xl tracking-tight">Northstar</span>
+            <span className="text-fg-primary font-medium text-xl"> Sober</span>
+          </div>
+          <h1 className="text-xl font-semibold text-fg-primary">Sign in</h1>
           <p className="text-sm text-fg-secondary mt-1">Manage your listings</p>
         </div>
 
@@ -67,6 +70,15 @@ function LoginContent() {
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="input-field"
               />
+            </div>
+
+            <div className="flex justify-end">
+              <Link
+                href="/operator/forgot-password"
+                className="text-xs text-accent hover:text-accent-dark transition-colors"
+              >
+                Forgot password?
+              </Link>
             </div>
 
             {error && (

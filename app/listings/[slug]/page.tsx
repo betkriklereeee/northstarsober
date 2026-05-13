@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/json-ld'
 import ContactForm from './contact-form'
 import ShareButton from './share-button'
 import PrintButton from './print-button'
+import OperatorCard from '@/components/operator-card'
 
 interface Props {
   params: { slug: string }
@@ -56,6 +57,9 @@ export default async function ListingPage({ params }: Props) {
       *,
       listing_amenities (
         amenities (id, name, slug)
+      ),
+      operators (
+        id, name, avatar_url, bio, location
       )
     `)
     .eq('slug', params.slug)
@@ -275,6 +279,14 @@ export default async function ListingPage({ params }: Props) {
               listingEmail={listing.email}
             />
           </div>
+
+          {/* Operator */}
+          {listing.operators && (
+            <div>
+              <p className="section-title mb-2">Listed by</p>
+              <OperatorCard operator={listing.operators} />
+            </div>
+          )}
 
           {/* Address */}
           <div className="card p-4">

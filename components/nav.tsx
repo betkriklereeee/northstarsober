@@ -64,6 +64,9 @@ export default function Nav() {
         <div className="hidden md:flex items-center gap-1.5">
           {user ? (
             <>
+              <Link href="/operator/profile" className="btn-ghost text-sm">
+                Profile
+              </Link>
               <Link href="/operator/dashboard" className="btn-ghost text-sm">
                 Dashboard
               </Link>
@@ -119,6 +122,13 @@ export default function Nav() {
           <div className="pt-2 border-t border-border mt-2">
             {user ? (
               <>
+                <Link
+                  href="/operator/profile"
+                  className="block py-2 px-2 rounded text-sm text-fg-primary hover:bg-bg-secondary"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Profile
+                </Link>
                 <Link
                   href="/operator/dashboard"
                   className="block py-2 px-2 rounded text-sm text-fg-primary hover:bg-bg-secondary"

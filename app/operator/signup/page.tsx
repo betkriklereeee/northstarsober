@@ -47,7 +47,10 @@ export default function SignupPage() {
     <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4 py-12 bg-bg-primary">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="text-2xl font-bold text-accent mb-1">9090</div>
+          <div className="mb-2">
+            <span className="text-accent font-bold text-xl tracking-tight">Northstar</span>
+            <span className="text-fg-primary font-medium text-xl"> Sober</span>
+          </div>
           <h1 className="text-xl font-semibold text-fg-primary">List your home</h1>
           <p className="text-sm text-fg-secondary mt-1">Free to join, free to list</p>
         </div>

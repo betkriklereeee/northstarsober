@@ -1,28 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-// TEMP: remove before launch — preview gate block
-const PREVIEW_PATHS = ['/preview-login', '/api/preview-login']
-
 export async function middleware(request: NextRequest) {
-  // ── Preview password gate ──────────────────────────────────────────────────
-  const PREVIEW_ENABLED = process.env.PREVIEW_PASSWORD !== undefined
-  const isStaticAsset =
-    request.nextUrl.pathname.startsWith('/_next') ||
-    request.nextUrl.pathname.startsWith('/favicon')
-
-  if (PREVIEW_ENABLED && !isStaticAsset) {
-    const previewCookie = request.cookies.get('ns-preview')
-    const isValidPreview = previewCookie?.value === process.env.PREVIEW_PASSWORD
-    const isPreviewPath = PREVIEW_PATHS.some((p) =>
-      request.nextUrl.pathname.startsWith(p)
-    )
-
-    if (!isValidPreview && !isPreviewPath) {
-      return NextResponse.redirect(new URL('/preview-login', request.url))
-    }
-  }
-
   // ── Supabase auth ──────────────────────────────────────────────────────────
   let response = NextResponse.next({
     request: { headers: request.headers },
