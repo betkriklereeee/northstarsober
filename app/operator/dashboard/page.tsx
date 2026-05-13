@@ -29,12 +29,26 @@ export default async function DashboardPage() {
 
   const { data: operator } = await supabase
     .from('operators')
-    .select('name, is_admin')
+    .select('name, is_admin, avatar_url, bio')
     .eq('id', user.id)
     .single()
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+      {!operator?.avatar_url && !operator?.bio && (
+        <div className="card p-4 mb-6 border-accent/30 bg-accent-faint flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-fg-primary">Complete your profile</p>
+            <p className="text-xs text-fg-secondary mt-0.5">
+              Add a photo and bio — it shows on your listings and builds trust with families.
+            </p>
+          </div>
+          <Link href="/operator/profile" className="btn-primary text-sm shrink-0">
+            Set up profile
+          </Link>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-xl font-bold text-fg-primary">Dashboard</h1>

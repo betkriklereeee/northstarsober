@@ -3,7 +3,6 @@ import './globals.css'
 import Nav from '@/components/nav'
 import Link from 'next/link'
 import { JsonLd } from '@/components/json-ld'
-import ConstructionBanner from '@/components/construction-banner'
 import { Analytics } from '@vercel/analytics/next'
 
 export const metadata: Metadata = {
@@ -80,7 +79,6 @@ export default function RootLayout({
             </p>
           </div>
         </footer>
-        <ConstructionBanner />
         <Analytics />
       </body>
     </html>

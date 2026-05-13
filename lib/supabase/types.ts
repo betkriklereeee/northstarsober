@@ -45,6 +45,13 @@ export interface Operator {
   phone: string | null
   is_admin: boolean
   created_at: string
+  avatar_url: string | null
+  bio: string | null
+  location: string | null
+  website: string | null
+  public_email: string | null
+  public_phone: string | null
+  updated_at: string
 }
 
 export interface ListingWithAmenities extends Listing {
