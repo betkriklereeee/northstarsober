@@ -58,13 +58,13 @@ export default async function ListingPage({ params }: Props) {
       listing_amenities (
         amenities (id, name, slug)
       ),
-      operators (
+      operators!left (
         id, name, avatar_url, bio, location
       )
     `)
     .eq('slug', params.slug)
     .in('status', ['live', 'pending'])
-    .single()
+    .maybeSingle()
 
   if (!listing) notFound()
 
