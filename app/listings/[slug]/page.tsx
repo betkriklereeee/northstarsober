@@ -63,7 +63,7 @@ export default async function ListingPage({ params }: Props) {
       )
     `)
     .eq('slug', params.slug)
-    .eq('status', 'live')
+    .in('status', ['live', 'pending'])
     .single()
 
   if (!listing) notFound()
