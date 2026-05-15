@@ -68,7 +68,7 @@ export default function ListingCard({ listing, selected, onClick }: ListingCardP
         </div>
 
         <p className="text-xs text-fg-secondary mb-2.5">
-          {listing.city}, {listing.county} County
+          {listing.city}, {listing.county ?? ''} County
         </p>
 
         <div className="flex items-center gap-3 text-xs text-fg-secondary">

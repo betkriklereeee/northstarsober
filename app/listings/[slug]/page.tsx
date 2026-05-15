@@ -159,7 +159,7 @@ export default async function ListingPage({ params }: Props) {
 
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <p className="text-fg-secondary text-sm">
-                {listing.city}, {listing.county} County · {listing.zip}
+                {listing.city}, {listing.county ?? ''} County · {listing.zip ?? ''}
               </p>
               <span className="text-fg-muted text-xs">
                 {formatLastUpdated(listing.updated_at)}
@@ -294,7 +294,7 @@ export default async function ListingPage({ params }: Props) {
             <p className="text-sm text-fg-secondary">
               {listing.address}
               <br />
-              {listing.city}, CA {listing.zip}
+              {listing.city}, CA {listing.zip ?? ''}
             </p>
             <a
               href={`https://maps.google.com/?q=${encodeURIComponent(listing.address + ', ' + listing.city + ', CA')}`}

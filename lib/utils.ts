@@ -58,12 +58,12 @@ export function cn(...classes: (string | undefined | null | false)[]): string {
 export function listingsToGeoJSON(listings: Listing[]) {
   return {
     type: 'FeatureCollection' as const,
-    features: listings.map((l) => ({
+    features: listings.filter((l) => l.lat != null && l.lng != null).map((l) => ({
       type: 'Feature' as const,
       id: l.id,
       geometry: {
         type: 'Point' as const,
-        coordinates: [l.lng, l.lat],
+        coordinates: [l.lng ?? 0, l.lat ?? 0],
       },
       properties: {
         id: l.id,

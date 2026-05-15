@@ -19,7 +19,7 @@ export default function MapView({ listings, selectedId, onSelectListing }: MapVi
 
   const flyTo = useCallback((listing: Listing) => {
     mapRef.current?.flyTo({
-      center: [listing.lng, listing.lat],
+      center: [listing.lng ?? 0, listing.lat ?? 0],
       zoom: 14,
       duration: 800,
     })
